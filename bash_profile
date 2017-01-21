@@ -245,3 +245,6 @@ alias pk='pkill -f /Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin
 ### Save known SSH keys
 ssh-add -A 2>/dev/null;
 
+### Start PSQL
+alias spsql="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
+
