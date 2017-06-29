@@ -6,8 +6,7 @@
 	email = nate.levine@lendup.com
 
 [core]
-	autocrlf = input
-
+	editor = "/usr/local/bin/vim"
 [alias]
 	co = checkout
 	ci = commit
