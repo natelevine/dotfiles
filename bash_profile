@@ -1,8 +1,12 @@
 ### Put psql on the path
-PATH=$PATH:/Library/PostgreSQL/9.3/bin
+##PATH=$PATH:/Library/PostgreSQL/9.3/bin
+PATH=$PATH:/usr/local/opt/postgresql@9.5/bin
 
 ### Put play on the path
 export PATH=$PATH:/Users/nlevine/lendup/play-1.2.6.7
+
+## play home for gradle
+export PLAY_HOME=/Users/nlevine/lendup/play-1.2.6.7
 
 ### Put ~/bin on the path
 export PATH=~/bin:$PATH
@@ -195,7 +199,7 @@ function nt() {
 }
 
 # Build lendup frontend assets
-alias buildfe="cd ~/lendup/play-1.2.6.7/ldc/client && ./node_modules/.bin/gulp"
+alias buildfe="cd ~/lendup/play-1.2.6.7/ldc/client && ./node_modules/.bin/gulp dev"
 
 #Pull provider documents from S3 bucket
 alias provider="./scripts/get_provider_docs.py --action pull --execute"
@@ -204,6 +208,9 @@ alias provider="./scripts/get_provider_docs.py --action pull --execute"
 complete -C aws_completer aws
 
 ### Java exports & Functions
+
+export JAVA6_HOME=$(/usr/libexec/java_home -v 1.6)
+
 java6 () {
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
 }
@@ -240,7 +247,7 @@ export JENKINS_MODE=1
 
 ### Annoying play server grep query
 alias gp='ps -A | grep play'
-alias pk='pkill -f /Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java'
+alias pk='pkill -9 -f play-1.2'
 
 ### Save known SSH keys
 ssh-add -A 2>/dev/null;
@@ -248,3 +255,19 @@ ssh-add -A 2>/dev/null;
 ### Start PSQL
 alias spsql="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 
+### Virtualenv setup
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
+
+## Heroku pipeline release (lendup)
+export JENKINS_USER=natelevine
+export JENKINS_TOKEN=b135ca7d7516a7ac0a703bdb74fc21f6
+
+export GITHUB_TOKEN=399354431b83e5453c8dac3d9ea5175fea402727
+
+## Start ChromeDriver
+alias cdriver="chromedriver --url-base=/wd/hub"
+
+## Checkup Checks
+export CHECKUP_CHECKS_HOME=/Users/nlevine/lendup/checkup-checks/checks
+export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
