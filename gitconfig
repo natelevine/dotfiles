@@ -2,8 +2,8 @@
 
 [user]
 # Please adapt and uncomment the following lines:
-  name = Nate Levine
-  email = nate.levine@lendup.com
+  name = Nathan Levine
+  email = natejlevine@gmail.com
 
 [fetch]
   prune = true
