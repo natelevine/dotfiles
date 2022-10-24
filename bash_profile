@@ -8,6 +8,27 @@ function_exists() {
 # or alternate shell users will get errors.
 function_exists complete && complete -cf sudo
 
+### BEGIN STRIPE
+source ~/.stripe_profile
+alias work="code --new-window ~/stripe/pay-server"
+
+### BEGIN APIORI GO
+export GOPATH=$HOME/go
+export PATH=$PATH:/$GOPATH/bin
+### END APIORI GO
+
+### END STRIPE
+
+### BEGIN RBENV
+export PATH="/Users/natelevine/.rbenv/shims:$PATH"
+export PATH="/Users/natelevine/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+### END RBENV
+
+### BEGIN SPACE COMMANDER
+export PATH="/Users/natelevine/stripe/space-commander/bin:$PATH"
+### END SPACE COMMANDER
+
 ### Configure command line colors
 export CLICOLOR=1
 
@@ -57,6 +78,7 @@ alias gk='gitk --all&'
 alias gx='gitx --all'
 alias gh='git hist'
 alias gpom='git pull origin master'
+alias gomp='git checkout master && git pull origin master'
 alias gcfl='git cfl'
 
 # Rebase current branch onto updated master
@@ -135,7 +157,7 @@ alias dex="docker exec -i -t"
 dstop() { docker stop $(docker ps -a -q); }
 
 # # Remove all containers
-drm() { docker rm $(docker ps -a -q); }
+# drm() { docker rm $(docker ps -a -q); }
 
 # Stop and Remove all containers
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
@@ -164,3 +186,11 @@ dkrm() {
   docker rm -f $(docker ps -a -q);
 }
 
+# Shared MSP shortcuts
+mspshell() { sc-kubectl --prod --cluster northwest -m kubeapiaa -n $1 exec pod/$2 -it -- bash; }
+
+# START - Managed by chef cookbook stripe_cpe_bin
+alias tc='/usr/local/stripe/bin/test_cookbook'
+alias cz='/usr/local/stripe/bin/chef-zero'
+alias cookit='tc && cz'
+# STOP - Managed by chef cookbook stripe_cpe_bin
