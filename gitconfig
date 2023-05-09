@@ -19,8 +19,8 @@
   editor = vim
 
 [help]
-# Automatically correct and execute mistyped commands such as `git stauts`
-  autocorrect = 1
+# Autocorrect includes things like "init" which is dangerous
+  autocorrect = 0
 
 [feature]
   manyfiles = true
