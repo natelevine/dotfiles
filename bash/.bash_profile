@@ -1,3 +1,7 @@
+# UTF-8 locale (fixes Unicode rendering in tmux, etc.)
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+
 # Load anything in the bashrc first
 [[ -s ~/.bashrc ]] && source ~/.bashrc
 
