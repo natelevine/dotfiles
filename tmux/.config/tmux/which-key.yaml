@@ -156,7 +156,7 @@ items:
       - name: Rename (r)
         key: R
         command: command-prompt -I "#W" "renamew -- \"%%\""
-      - name: Kill (x)
+      - name: Kill (X)
         key: X
         command: 'confirm -p "Kill window #W? (y/n)" killw'
   - name: +Sessions
@@ -171,7 +171,7 @@ items:
       - name: Rename (R)
         key: r
         command: command-prompt -I "#S" "rename-session -- \"%%\""
-      - name: Kill (X)
+      - name: Kill (Q)
         key: X
         command: 'confirm -p "Kill session #S? (y/n)" kill-session'
   - name: +Buffers
