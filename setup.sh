@@ -42,9 +42,9 @@ else
   echo "==> tmux-which-key already installed"
 fi
 
-# --- Copy which-key config ---
+# --- Symlink which-key config ---
 echo "==> Configuring tmux-which-key..."
-cp "$DOTFILES_DIR/tmux/.config/tmux/which-key.yaml" \
+ln -sf "$DOTFILES_DIR/tmux/.config/tmux/which-key.yaml" \
    "$HOME/.tmux/plugins/tmux-which-key/config.yaml"
 
 # --- Install remaining TPM plugins ---
