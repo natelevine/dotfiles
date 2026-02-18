@@ -41,11 +41,9 @@ WHITE="\[\e[1;37m\]"
 alias up="cd .."
 alias h="pushd ~"
 
-### Load script that allows for showing git branch in PS1
-source ~/code/dotfiles/git-prompt.sh
-
-### Load script that allows for git autocompletion
-source ~/code/dotfiles/git-completion.bash
+### Load git-prompt and git-completion (symlinked to ~ by stow)
+[[ -f ~/.git-prompt.sh ]] && source ~/.git-prompt.sh
+[[ -f ~/.git-completion.bash ]] && source ~/.git-completion.bash
 
 ### Change command prompt display
 NAME="nate"
@@ -105,15 +103,9 @@ gsp() {
 ### Setup local branch to track remote
 got() { git checkout --track -b $1 origin/$1; }
 
-alias sbl="open -a Sublime\ Text\ 2"
 alias prof="vim ~/.bash_profile"
 alias r="source ~/.bash_profile"
 alias mv='mv -i '
-
-### GIT AUTOCOMPLETE MAGIC
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
 
 # ------------------------------------
 # Docker alias and function
@@ -143,13 +135,10 @@ alias dki="docker run -i -t -P"
 # Execute interactive container, e.g., $dex base /bin/bash
 alias dex="docker exec -i -t"
 
-# # Execute interactive container with bash, e.g., $dex base /bin/bash
-# dbash() { docker exec -it=$1 bash; }
-
 # Stop all containers
 dstop() { docker stop $(docker ps -a -q); }
 
-# # Remove all containers
+# Remove all containers
 drm() { docker rm $(docker ps -a -q); }
 
 # Stop and Remove all containers
@@ -164,7 +153,7 @@ dri() { docker rmi $(docker images -q); }
 # Remove dangling images
 drdi() { docker rmi $(docker images -f "dangling=true" -q); }
 
-# Dockerfile build, e.g., $dbu tcnksm/test 
+# Dockerfile build, e.g., $dbu tcnksm/test
 dbu() { docker build -t=$1 .; }
 
 # Docker environment for default
@@ -172,31 +161,11 @@ denv() { eval "$(docker-machine env default)"; }
 
 # Show all alias related docker
 dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
- 
 
 # docker function to stop and remove all containers (force)
 dkrm() {
   docker rm -f $(docker ps -a -q);
 }
 
-### Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-. "$HOME/.cargo/env"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PATH="/Users/nate/.local/share/solana/install/active_release/bin:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/nate/google-cloud-sdk/path.bash.inc' ]; then . '/Users/nate/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/nate/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/nate/google-cloud-sdk/completion.bash.inc'; fi
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
+# Load machine-specific config (PATH, env vars, etc.)
+[[ -f ~/.bash_profile.local ]] && source ~/.bash_profile.local
