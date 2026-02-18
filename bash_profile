@@ -1,3 +1,6 @@
+# Load anything in the bashrc first
+[[ -s ~/.bashrc ]] && source ~/.bashrc
+
 function_exists() {
   command -v $1 > /dev/null
   return $?
@@ -39,7 +42,10 @@ alias up="cd .."
 alias h="pushd ~"
 
 ### Load script that allows for showing git branch in PS1
-source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
+source ~/code/dotfiles/git-prompt.sh
+
+### Load script that allows for git autocompletion
+source ~/code/dotfiles/git-completion.bash
 
 ### Change command prompt display
 NAME="nate"
@@ -52,12 +58,16 @@ alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
 alias gd='git diff'
+# git log all (vs. only current branch commits defined below)
+alias gla='git log'
 alias gco='git checkout'
 alias gk='gitk --all&'
 alias gx='gitx --all'
-alias gh='git hist'
+alias ghist='git hist'
 alias gpom='git pull origin master'
+alias Gpom=gpom
 alias gcfl='git cfl'
+alias gssb='git diff HEAD ^master'
 
 # Rebase current branch onto updated master
 grbm() {
@@ -65,10 +75,15 @@ grbm() {
   git checkout master && git pull origin master && git checkout $curr_branch && git rebase master;
 }
 
+# "Git update checkout" i.e. pull and fetch master then checkout a remote branch
+guco() {
+  git checkout master && git pull origin master && git fetch && git checkout $1;
+}
+
 ### Log only current branch's commits
 gl() {
-  branch=$(git symbolic-ref HEAD);
-  git log $branch --not master;
+ branch=$(git branch --show-current);
+ git log $branch --not master;
 }
 
 ### stashing stuff :D
@@ -163,4 +178,25 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 dkrm() {
   docker rm -f $(docker ps -a -q);
 }
+
+### Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+. "$HOME/.cargo/env"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="/Users/nate/.local/share/solana/install/active_release/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/nate/google-cloud-sdk/path.bash.inc' ]; then . '/Users/nate/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/nate/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/nate/google-cloud-sdk/completion.bash.inc'; fi
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 

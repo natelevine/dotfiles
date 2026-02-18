@@ -103,8 +103,11 @@ set shiftround
 
 " Colors {{{
 " Set syntax highlighting options.
-set t_Co=256
+syntax enable
+set background=dark
+let g:solarized_termcolors=256
 colorscheme solarized
+set t_Co=256
 hi CursorLine ctermbg=235
 highlight ColorColumn ctermbg=232
 hi IndentGuidesOdd ctermbg=236
