@@ -81,7 +81,6 @@ if [ ! -f "$HOME/.bash_profile.local" ]; then
 # export PATH="$BUN_INSTALL/bin:$PATH"
 
 # ### Claude Code MCP servers
-# export GITHUB_MCP_TOKEN="ghp_..."
 # export EXA_API_KEY="..."
 LOCALEOF
 else
@@ -92,14 +91,8 @@ fi
 if command -v claude &>/dev/null; then
   echo "==> Setting up Claude Code MCP servers..."
   # User-scope servers (available across all projects)
-  # These require env vars set in ~/.bash_profile.local:
-  #   GITHUB_MCP_TOKEN, EXA_API_KEY
-  if [ -n "$GITHUB_MCP_TOKEN" ]; then
-    claude mcp add --scope user --transport http github https://api.githubcopilot.com/mcp/ \
-      -e "Authorization=Bearer $GITHUB_MCP_TOKEN" 2>/dev/null && echo "    Added github MCP" || echo "    github MCP already configured"
-  else
-    echo "    Skipping github MCP (set GITHUB_MCP_TOKEN in ~/.bash_profile.local)"
-  fi
+  # GitHub MCP is handled by the github plugin (enabledPlugins in settings.json)
+  # These require env vars set in ~/.bash_profile.local: EXA_API_KEY
   claude mcp add --scope user --transport http grep https://mcp.grep.app 2>/dev/null \
     && echo "    Added grep MCP" || echo "    grep MCP already configured"
   if [ -n "$EXA_API_KEY" ]; then
