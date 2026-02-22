@@ -2,7 +2,7 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
-PACKAGES="bash git vim inputrc tmux"
+PACKAGES="bash git vim inputrc tmux claude"
 
 echo "==> Dotfiles directory: $DOTFILES_DIR"
 
@@ -17,6 +17,12 @@ else
   echo "No supported package manager found (apt or brew). Install stow, tmux, vim, git manually."
   exit 1
 fi
+
+# --- Pre-create directories that stow should NOT replace wholesale ---
+# Without this, stow would symlink ~/.claude -> dotfiles/claude/.claude
+# which would put runtime files (cache, history, etc.) in the dotfiles repo.
+mkdir -p "$HOME/.claude"
+mkdir -p "$HOME/.config/tmux"
 
 # --- Stow packages ---
 echo "==> Stowing dotfiles..."
@@ -72,9 +78,39 @@ if [ ! -f "$HOME/.bash_profile.local" ]; then
 # ### Bun
 # export BUN_INSTALL="$HOME/.bun"
 # export PATH="$BUN_INSTALL/bin:$PATH"
+
+# ### Claude Code MCP servers
+# export GITHUB_MCP_TOKEN="ghp_..."
+# export EXA_API_KEY="..."
 LOCALEOF
 else
   echo "==> ~/.bash_profile.local already exists, skipping"
+fi
+
+# --- Claude Code MCP servers ---
+if command -v claude &>/dev/null; then
+  echo "==> Setting up Claude Code MCP servers..."
+  # User-scope servers (available across all projects)
+  # These require env vars set in ~/.bash_profile.local:
+  #   GITHUB_MCP_TOKEN, EXA_API_KEY
+  if [ -n "$GITHUB_MCP_TOKEN" ]; then
+    claude mcp add --scope user --transport http github https://api.githubcopilot.com/mcp/ \
+      -e "Authorization=Bearer $GITHUB_MCP_TOKEN" 2>/dev/null && echo "    Added github MCP" || echo "    github MCP already configured"
+  else
+    echo "    Skipping github MCP (set GITHUB_MCP_TOKEN in ~/.bash_profile.local)"
+  fi
+  claude mcp add --scope user --transport http grep https://mcp.grep.app 2>/dev/null \
+    && echo "    Added grep MCP" || echo "    grep MCP already configured"
+  if [ -n "$EXA_API_KEY" ]; then
+    claude mcp add --scope user exa -- npx -y exa-mcp-server 2>/dev/null \
+      && echo "    Added exa MCP" || echo "    exa MCP already configured"
+  else
+    echo "    Skipping exa MCP (set EXA_API_KEY in ~/.bash_profile.local)"
+  fi
+  echo "    Note: project-scope MCP servers (postgres, linear) belong in each project's .mcp.json"
+else
+  echo "==> Claude Code not installed, skipping MCP setup"
+  echo "    Install: curl -fsSL https://claude.ai/install.sh | bash"
 fi
 
 echo ""
