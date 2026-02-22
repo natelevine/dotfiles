@@ -2,7 +2,7 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
-PACKAGES="bash git vim inputrc tmux claude"
+PACKAGES="bash git vim inputrc tmux claude codex"
 
 echo "==> Dotfiles directory: $DOTFILES_DIR"
 
@@ -22,6 +22,7 @@ fi
 # Without this, stow would symlink ~/.claude -> dotfiles/claude/.claude
 # which would put runtime files (cache, history, etc.) in the dotfiles repo.
 mkdir -p "$HOME/.claude"
+mkdir -p "$HOME/.codex"
 mkdir -p "$HOME/.config/tmux"
 
 # --- Stow packages ---
